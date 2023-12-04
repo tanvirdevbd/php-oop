@@ -1,0 +1,45 @@
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+  background-color: azure;
+}
+
+h3 {
+  text-transform: uppercase;
+  color: rgb(51, 46, 40);
+  margin-top: 40px;
+}
+
+.form-section {
+  color: rgb(129, 126, 122);
+  width: 460px;
+  height: 300px;
+  padding: 30px;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+h5 {
+  margin-bottom: 10px;
+}
+
+a {
+  text-transform: uppercase;
+  padding: 10px;
+}
+
+form i {
+  margin-left: 30px;
+  cursor: pointer;
+}
+
+.pass-update-btn {
+  background-color: antiquewhite;
+  border-radius: 5px;
+  /* color: rgb(129, 126, 122); */
+  color: red;
+  padding: 5px;
+  font-weight: bold;
+}
