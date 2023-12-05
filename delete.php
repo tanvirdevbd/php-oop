@@ -1,12 +1,14 @@
 <?php
-include 'connect.php';
+
+include 'database.php';
+$userObj = new Database();
 
 $id = $_POST['id'];
-
-$sql1 = "SELECT * FROM registration WHERE id=$id";
-$stmt1 = $pdo->prepare($sql1);
-$stmt1->execute();
-$res1 = $stmt1->fetch(PDO::FETCH_ASSOC);
+$res1 = $userObj->fetchOneRecordById($id);
+// $sql1 = "SELECT * FROM registration WHERE id=$id";
+// $stmt1 = $pdo->prepare($sql1);
+// $stmt1->execute();
+// $res1 = $stmt1->fetch(PDO::FETCH_ASSOC);
 
 if ($res1['std_img'] !== "") {
     unlink($res1['std_img']);

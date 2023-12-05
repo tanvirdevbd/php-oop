@@ -31,6 +31,46 @@ class Database
             return 0;
         }
     }
+    //Insert Student registration data into registration table
+    public function updateRegistrationByAdmin($user_type, $std_img, $firstname, $middlename, $lastname, $phone, $email, $password, $retypepassword, $class, $gender, $division, $district, $upazila, $address, $gallery_images, $user_own_id)
+    {
+        $sql = "UPDATE `registration`
+                    SET firstname=:firstname,
+                    middlename=:middlename,
+                    lastname=:lastname,
+                    phone=:phone,
+                    password=:password,
+                    retypepassword=:retypepassword,
+                    class=:class,
+                    gender=:gender,
+                    division=:division,
+                    district=:district,
+                    upazila=:upazila,
+                    address=:address,
+                    std_img=:std_img,
+                    user_type=:user_type,
+                    gallery_images=:gallery_images
+                    WHERE id=$user_own_id";
+
+        $stmt = $this->conn->prepare($sql);
+
+        $result = $stmt->execute(['firstname' => $firstname, 'middlename' => $middlename, 'lastname' => $lastname, 'phone' => $phone,  'password' => $password, 'retypepassword' => $retypepassword, 'class' => $class, 'gender' => $gender, 'division' => $division, 'district' => $district, 'upazila' => $upazila, 'address' => $address, 'std_img' => $std_img, 'user_type' => $user_type, 'gallery_images' => $gallery_images]);
+
+        if ($result) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    // TODO : Delete operation remains
+    public function deleteRecord($id)
+    {
+        $sql = "DELETE FROM registration WHERE id=$id";
+        $stmt = $this->conn->prepare($sql);
+        $data = $stmt->execute();
+        return $data;
+    }
 
     //Data one record read Function
     public function fetchAllRecord()
@@ -65,6 +105,7 @@ class Database
         return $recordEamilPass;
     }
 
+    //search
     public function nameOrPhoneSearch($searchedTerm)
     {
         $sql = "SELECT * FROM `registration` WHERE firstname LIKE '%$searchedTerm%' OR phone LIKE '%$searchedTerm%'";
@@ -74,7 +115,16 @@ class Database
         return $searchRes;
     }
 
+    //class data
     public function loadClassData()
+    {
+        $sql = "SELECT * FROM class_tb";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        return $stmt;
+    }
+
+    public function loadClassDataOptions()
     {
         $sql = "SELECT * FROM class_tb";
         $stmt = $this->conn->prepare($sql);
@@ -82,6 +132,21 @@ class Database
         $str = "";
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $str .= "<option value='{$row['id']}'>{$row['name']}</option>";
+        }
+        return $str;
+    }
+
+    //division
+    public function loadDivisionSelectedOptions($selectedDivision)
+    {
+        $sql = "SELECT * FROM division_tb";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        $str = "";
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $str .= "<option value='{$row['id']}'" . ($selectedDivision == $row['id'] ? 'selected' : '') . " >
+            {$row['name']}
+        </option>";
         }
         return $str;
     }
@@ -97,7 +162,7 @@ class Database
         return $str;
     }
 
-    public function loadDivisionOptionById($userDivision)
+    public function loadDivisionOptionData($userDivision)
     {
         $sql1 = "SELECT name from division_tb where id=:id";
         $stmt1 = $this->conn->prepare($sql1);
@@ -106,6 +171,20 @@ class Database
         return $divisionRes;
     }
 
+    //district
+    public function loadDistrictSelectedOptions($selectedDistrict)
+    {
+        $sql = "SELECT * FROM district_tb";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        $str = "";
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $str .= "<option value='{$row['id']}'" . ($selectedDistrict == $row['id'] ? 'selected' : '') . " >
+            {$row['name']}
+        </option>";
+        }
+        return $str;
+    }
     public function loadDistrictOptions($divisionId)
     {
         $sql = "SELECT * FROM district_tb WHERE division_id = {$divisionId}";
@@ -127,6 +206,7 @@ class Database
         return $districtRes;
     }
 
+    //upazila
     public function loadUpazilaOptions($districtId)
     {
         $sql = "SELECT * FROM upazila_tb WHERE district_id = {$districtId}";
@@ -137,6 +217,19 @@ class Database
         $str = "";
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $str .= "<option value='{$row['id']}'>{$row['name']}</option>";
+        }
+        return $str;
+    }
+    public function loadUpazilaSelectedOptions($selectedUpazila)
+    {
+        $sql = "SELECT * FROM upazila_tb";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        $str = "";
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $str .= "<option value='{$row['id']}'" . ($selectedUpazila == $row['id'] ? 'selected' : '') . " >
+            {$row['name']}
+        </option>";
         }
         return $str;
     }

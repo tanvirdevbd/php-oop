@@ -1,6 +1,5 @@
 <?php
 session_start();
-// include 'connect.php';
 include 'database.php';
 $userObj = new Database();
 
@@ -10,10 +9,6 @@ $gallery_imagesArr = [];
 
 if ($_POST['type'] == "edit") {
     $result = $userObj->fetchOneRecordById($_POST['id']);
-    // $sql = "SELECT * FROM registration WHERE id={$_POST['id']}";
-    // $stmt = $pdo->prepare($sql);
-    // $stmt->execute();
-    // $result = $stmt->fetch(PDO::FETCH_ASSOC);
     $gallery_imagesArr = explode(',', $result['gallery_images']);
 }
 ?>
@@ -127,10 +122,7 @@ if ($_POST['type'] == "edit") {
                     <label for='class' class='form-label me-4 name'>Class: </label>
                     <select name='class' id='class' class='select-area'>
                         <?php
-                        // TODO: no pdo here so call by oop
-                        $sql = "SELECT * FROM class_tb";
-                        $stmt = $pdo->prepare($sql);
-                        $stmt->execute();
+                        $stmt = $userObj->loadClassData();
 
                         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                         ?>
@@ -149,16 +141,9 @@ if ($_POST['type'] == "edit") {
                     <select name='division' id='division' class='select-area'>
                         <option value=''>Select Division</option>
                         <?php
-                        $sql1 = "SELECT * FROM division_tb";
-                        $stmt1 = $pdo->prepare($sql1);
-                        $stmt1->execute();
-                        while ($row = $stmt1->fetch(PDO::FETCH_ASSOC)) {
-                        ?>
-                            <option value='<?php echo $row['id'] ?>' <?php echo $result['division'] == $row['id'] ? "selected" : "" ?>>
-                                <?php echo $row['name'] ?>
-                            </option>
-                        <?php
-                        }
+                        $selectedDivision = $result['division'];
+                        $resDivision = $userObj->loadDivisionSelectedOptions($selectedDivision);
+                        echo $resDivision;
                         ?>
                     </select>
                 </div>
@@ -169,16 +154,9 @@ if ($_POST['type'] == "edit") {
                     <select name='district' id='district' class='select-area'>
                         <option value=''>Select District</option>
                         <?php
-                        $sql2 = "SELECT * FROM district_tb";
-                        $stmt2 = $pdo->prepare($sql2);
-                        $stmt2->execute();
-                        while ($row = $stmt2->fetch(PDO::FETCH_ASSOC)) {
-                        ?>
-                            <option value='<?php echo $row['id'] ?>' <?php echo $result['district'] == $row['id'] ? "selected" : "" ?>>
-                                <?php echo $row['name'] ?>
-                            </option>
-                        <?php
-                        }
+                        $selectedDistrict = $result['district'];
+                        $resDistrict = $userObj->loadDistrictSelectedOptions($selectedDistrict);
+                        echo $resDistrict;
                         ?>
                     </select>
                 </div>
@@ -189,16 +167,9 @@ if ($_POST['type'] == "edit") {
                     <select name='upazila' id='upazila' class='select-area'>
                         <option value=''>Select Upazila</option>
                         <?php
-                        $sql3 = "SELECT * FROM upazila_tb";
-                        $stmt3 = $pdo->prepare($sql3);
-                        $stmt3->execute();
-                        while ($row = $stmt3->fetch(PDO::FETCH_ASSOC)) {
-                        ?>
-                            <option value='<?php echo $row['id'] ?>' <?php echo $result['upazila'] == $row['id'] ? "selected" : "" ?>>
-                                <?php echo $row['name'] ?>
-                            </option>
-                        <?php
-                        }
+                        $selectedUpazila = $result['upazila'];
+                        $resUpazila = $userObj->loadUpazilaSelectedOptions($selectedUpazila);
+                        echo $resUpazila;
                         ?>
                     </select>
                 </div>
@@ -285,7 +256,6 @@ if ($_POST['type'] == "edit") {
                     type: 'POST',
                     data: formData,
                     success: function(data) {
-                        console.log(data)
                         let message = JSON.parse(data);
                         if (message.successMessage) {
                             $("#success-modal-edit").html(message.successMessage).show();

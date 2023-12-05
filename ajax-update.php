@@ -1,7 +1,8 @@
 <?php
 session_start();
 
-include "connect.php";
+include 'database.php';
+$userObj = new Database();
 
 $sessionUser = $_SESSION['user_type'];
 
@@ -10,12 +11,8 @@ $errorValue = 0;
 $message = array("errorMessage" => "", "successMessage" => "");
 
 $user_own_id = $_POST['user_own_id'];
-
-$sql = "SELECT * FROM registration WHERE id=$user_own_id";
-$stmt = $pdo->prepare($sql);
-$stmt->execute();
-$result = $stmt->fetch(PDO::FETCH_ASSOC);
-
+$result = $userObj->fetchOneRecordById($user_own_id);
+$email = $result['email'];
 $firstname = "";
 if ($result['firstname'] != $_POST['firstname']) {
     $firstname = $_POST['firstname'];
@@ -160,63 +157,49 @@ $district = $_POST['district'];
 $upazila = $_POST['upazila'];
 $address = $_POST['address'];
 
-if (!$errorValue && $sessionUser) {
-    $sql = "UPDATE `registration`
-                    SET firstname=:firstname,
-                    middlename=:middlename,
-                    lastname=:lastname,
-                    phone=:phone,
-                    password=:password,
-                    retypepassword=:retypepassword,
-                    class=:class,
-                    gender=:gender,
-                    division=:division,
-                    district=:district,
-                    upazila=:upazila,
-                    address=:address,
-                    std_img=:std_img,
-                    user_type=:user_type,
-                    gallery_images=:gallery_images
-                    WHERE id=$user_own_id";
-
-    $stmt = $pdo->prepare($sql);
-
-    $res = $stmt->execute(['firstname' => $firstname, 'middlename' => $middlename, 'lastname' => $lastname, 'phone' => $phone,  'password' => $password, 'retypepassword' => $retypepassword, 'class' => $class, 'gender' => $gender, 'division' => $division, 'district' => $district, 'upazila' => $upazila, 'address' => $address, 'std_img' => $std_img, 'user_type' => $user_type, 'gallery_images' => $gallery_images]);
-
+if (!$errorValue) {
+    $res = $userObj->updateRegistrationByAdmin($user_type, $std_img, $firstname, $middlename, $lastname, $phone, $email, $password, $retypepassword, $class, $gender, $division, $district, $upazila, $address, $gallery_images, $user_own_id);
     if ($res) {
         $message["successMessage"] = "Successfully updated";
     } else {
         $message["errorMessage"] = "Update failed";
     }
     echo json_encode($message);
-} else if (!$sessionUser) {
-    $sql = "UPDATE `registration`
-                    SET firstname=:firstname,
-                    middlename=:middlename,
-                    lastname=:lastname,
-                    phone=:phone,
-                    password=:password,
-                    retypepassword=:retypepassword,
-                    class=:class,
-                    gender=:gender,
-                    division=:division,
-                    district=:district,
-                    upazila=:upazila,
-                    address=:address,
-                    std_img=:std_img,
-                    gallery_images=:gallery_images
-                    WHERE id=$user_own_id";
+}
 
-    $stmt = $pdo->prepare($sql);
+// else if (!$sessionUser) {
+// $sql = "UPDATE `registration`
+//                 SET firstname=:firstname,
+//                 middlename=:middlename,
+//                 lastname=:lastname,
+//                 phone=:phone,
+//                 password=:password,
+//                 retypepassword=:retypepassword,
+//                 class=:class,
+//                 gender=:gender,
+//                 division=:division,
+//                 district=:district,
+//                 upazila=:upazila,
+//                 address=:address,
+//                 std_img=:std_img,
+//                 gallery_images=:gallery_images
+//                 WHERE id=$user_own_id";
 
-    $res = $stmt->execute(['firstname' => $firstname, 'middlename' => $middlename, 'lastname' => $lastname, 'phone' => $phone,  'password' => $password, 'retypepassword' => $retypepassword, 'class' => $class, 'gender' => $gender, 'division' => $division, 'district' => $district, 'upazila' => $upazila, 'address' => $address, 'std_img' => $std_img, 'gallery_images' => $gallery_images]);
+// $stmt = $pdo->prepare($sql);
 
-    if ($res) {
-        $message["successMessage"] = "Successfully updated";
-    } else {
-        $message["errorMessage"] = "Update failed";
-    }
-    echo json_encode($message);
-} else {
+// $res = $stmt->execute(['firstname' => $firstname, 'middlename' => $middlename, 'lastname' => $lastname, 'phone' => $phone,  'password' => $password, 'retypepassword' => $retypepassword, 'class' => $class, 'gender' => $gender, 'division' => $division, 'district' => $district, 'upazila' => $upazila, 'address' => $address, 'std_img' => $std_img, 'gallery_images' => $gallery_images]);
+
+
+//     $res = $userObj->updateRegistrationByAdmin($user_type, $std_img, $firstname, $middlename, $lastname, $phone, $email, $password, $retypepassword, $class, $gender, $division, $district, $upazila, $address, $gallery_images, $user_own_id);
+
+//     if ($res) {
+//         $message["successMessage"] = "Successfully updated";
+//     } else {
+//         $message["errorMessage"] = "Update failed";
+//     }
+//     echo json_encode($message);
+// }
+
+else {
     echo json_encode($message);
 }

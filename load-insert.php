@@ -76,7 +76,7 @@ $userObj = new Database();
                 <select name="class" id="class" class="select-area" required>
                     <option value="">Select Class</option>
                     <?php
-                    $classRes = $userObj->loadClassData();
+                    $classRes = $userObj->loadClassDataOptions();
                     echo $classRes;
                     ?>
                 </select>

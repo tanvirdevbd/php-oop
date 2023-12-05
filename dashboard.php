@@ -5,7 +5,6 @@ if (!$_SESSION["id"]) {
     header("Location: login.php");
 }
 
-// include 'connect.php';
 include 'database.php';
 $userObj = new Database();
 

@@ -44,11 +44,7 @@ if ($sessionUser && $_POST['type'] == "search") {
             <td>{$row['gender']}</td>
             <td>";
             $userDivision = $row['division'];
-            $divisionRes = $userObj->loadDivisionOptionById($userDivision);
-            // $sql1 = "SELECT name from division_tb where id=:id";
-            // $stmt1 = $pdo->prepare($sql1);
-            // $stmt1->execute(['id' => $row['division']]);
-            // $divisionRes = $stmt1->fetch(PDO::FETCH_ASSOC);
+            $divisionRes = $userObj->loadDivisionOptionData($userDivision);
             if (!$divisionRes) {
                 $trSingle .=  "";
             } else {
@@ -59,10 +55,6 @@ if ($sessionUser && $_POST['type'] == "search") {
             <td>";
             $userDistrict = $row['district'];
             $districtRes = $userObj->loadDistrictDataById($userDistrict);
-            // $sql2 = "SELECT name from district_tb where id=:id";
-            // $stmt2 = $pdo->prepare($sql2);
-            // $stmt2->execute(['id' => $row['district']]);
-            // $districtRes = $stmt2->fetch(PDO::FETCH_ASSOC);
             if (!$districtRes) {
                 $trSingle .=  "";
             } else {
@@ -73,10 +65,6 @@ if ($sessionUser && $_POST['type'] == "search") {
             <td>";
             $userUpazila = $row['upazila'];
             $upazilaRes = $userObj->loadUpazilaDataById($userUpazila);
-            // $sql3 = "SELECT name from upazila_tb where id=:id";
-            // $stmt3 = $pdo->prepare($sql3);
-            // $stmt3->execute(['id' => $row['upazila']]);
-            // $upazilaRes = $stmt3->fetch(PDO::FETCH_ASSOC);
 
             if (!$upazilaRes) {
                 $trSingle .=  "";
@@ -144,11 +132,7 @@ if ($sessionUser && $_POST['type'] == "search") {
 
         <td style='width: 5%;'>";
         $userDivision = $row['division'];
-        $divisionRes = $userObj->loadDivisionOptionById($userDivision);
-        // $sql1 = "SELECT name from division_tb where id=:id";
-        // $stmt1 = $pdo->prepare($sql1);
-        // $stmt1->execute(['id' => $row['division']]);
-        // $divisionRes = $stmt1->fetch(PDO::FETCH_ASSOC);
+        $divisionRes = $userObj->loadDivisionOptionData($userDivision);
 
         if (!$divisionRes) {
             $trSingle .=  "";
@@ -162,11 +146,6 @@ if ($sessionUser && $_POST['type'] == "search") {
         $userDistrict = $row['district'];
         $districtRes = $userObj->loadDistrictDataById($userDistrict);
 
-        // $sql2 = "SELECT name from district_tb where id=:id";
-        // $stmt2 = $pdo->prepare($sql2);
-        // $stmt2->execute(['id' => $row['district']]);
-        // $districtRes = $stmt2->fetch(PDO::FETCH_ASSOC);
-
         if (!$districtRes) {
             $trSingle .=  "";
         } else {
@@ -178,11 +157,6 @@ if ($sessionUser && $_POST['type'] == "search") {
         <td style='width: 5%;'>";
         $userUpazila = $row['upazila'];
         $upazilaRes = $userObj->loadUpazilaDataById($userUpazila);
-
-        // $sql3 = "SELECT name from upazila_tb where id=:id";
-        // $stmt3 = $pdo->prepare($sql3);
-        // $stmt3->execute(['id' => $row['upazila']]);
-        // $upazilaRes = $stmt3->fetch(PDO::FETCH_ASSOC);
 
         if (!$upazilaRes) {
             $trSingle .=  "";
@@ -242,34 +216,19 @@ if ($sessionUser && $_POST['type'] == "search") {
         <td  style='width: 5%;'>{$res['gender']}</td>
         <td style='width: 5%;'>";
     $userDivision = $res['division'];
-    $divisionRes = $userObj->loadDivisionOptionById($userDivision);
-    // $sql1 = "SELECT name from division_tb where id=:id";
-    // $stmt1 = $pdo->prepare($sql1);
-    // $stmt1->execute(['id' => $res['division']]);
-    // $divisionRes = $stmt1->fetch(PDO::FETCH_ASSOC);
+    $divisionRes = $userObj->loadDivisionOptionData($userDivision);
     $str .=  $divisionRes['name'];
     $str .= "</td>
     
     <td style='width: 5%;'>";
     $userDistrict = $res['district'];
     $districtRes = $userObj->loadDistrictDataById($userDistrict);
-
-    // $sql2 = "SELECT name from district_tb where id=:id";
-    // $stmt2 = $pdo->prepare($sql2);
-    // $stmt2->execute(['id' => $res['district']]);
-    // $districtRes = $stmt2->fetch(PDO::FETCH_ASSOC);
-
     $str .=  $districtRes['name'];
     $str .= "</td>   
     
     <td style='width: 5%;'>";
     $userUpazila = $res['upazila'];
     $upazilaRes = $userObj->loadUpazilaDataById($userUpazila);
-
-    // $sql3 = "SELECT name from upazila_tb where id=:id";
-    // $stmt3 = $pdo->prepare($sql3);
-    // $stmt3->execute(['id' => $res['upazila']]);
-    // $upazilaRes = $stmt3->fetch(PDO::FETCH_ASSOC);
 
     if (!$upazilaRes) {
         $str .=  "";
